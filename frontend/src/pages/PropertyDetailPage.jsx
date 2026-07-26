@@ -257,7 +257,7 @@ const PropertyDetailPage = () => {
 
               <div className="mt-6 pt-6 border-t border-white/20">
                 <a 
-                  href="tel:+221770000000"
+                  href="tel:+22666395254"
                   className="btn-secondary w-full mb-3"
                 >
                   <Phone size={18} className="mr-2" />

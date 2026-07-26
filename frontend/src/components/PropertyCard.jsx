@@ -1,6 +1,6 @@
 /**
- * Composant carte d'annonce immobilière
- * GICOS - Galaxie Immobilière Construction et Services
+ * Composant carte d'annonce immobiliere
+ * GICOS - Galaxie Immobiliere Construction et Services
  */
 
 import React from 'react';
@@ -42,7 +42,7 @@ const PropertyCard = ({ property }) => {
         {/* Badge type */}
         <div className="absolute top-4 left-4">
           <span className={`badge ${property_type === 'vente' ? 'badge-vente' : 'badge-location'}`}>
-            {property_type === 'vente' ? 'À vendre' : 'À louer'}
+            {property_type === 'vente' ? 'A vendre' : 'A louer'}
           </span>
         </div>
 
@@ -61,7 +61,7 @@ const PropertyCard = ({ property }) => {
 
       {/* Content */}
       <div className="p-5">
-        {/* Catégorie */}
+        {/* Categorie */}
         {category && (
           <p className="text-primary-600 text-sm font-medium mb-1 capitalize">
             {category}
@@ -79,12 +79,12 @@ const PropertyCard = ({ property }) => {
           <span className="text-sm">{city}</span>
         </div>
 
-        {/* Caractéristiques */}
+        {/* Caracteristiques */}
         <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
           {surface && (
             <div className="flex items-center gap-1.5 text-gray-600">
               <Maximize size={16} />
-              <span className="text-sm">{surface} m²</span>
+              <span className="text-sm">{surface} m2</span>
             </div>
           )}
           {bedrooms && (
@@ -102,7 +102,7 @@ const PropertyCard = ({ property }) => {
           {rooms && !bedrooms && !bathrooms && (
             <div className="flex items-center gap-1.5 text-gray-600">
               <Maximize size={16} />
-              <span className="text-sm">{rooms} pièces</span>
+              <span className="text-sm">{rooms} pieces</span>
             </div>
           )}
         </div>

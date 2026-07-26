@@ -73,16 +73,16 @@ const Footer = () => {
           {/* Logo et description */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-xl">G</span>
+              <div className="w-12 h-12 rounded-xl overflow-hidden bg-white p-1">
+                <img src="/logo.png" alt="GICOS" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h2 className="font-display font-bold text-xl text-white">GICOS</h2>
-                <p className="text-xs text-gray-400">Galaxie Immobilière</p>
+                <p className="text-xs text-gray-400">Galaxie Immobiliere</p>
               </div>
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Votre partenaire de confiance pour tous vos projets immobiliers, de construction et de services au Sénégal.
+              Votre partenaire de confiance pour tous vos projets immobiliers, de construction et de services au Burkina Faso.
             </p>
             <div className="flex gap-4">
               <a 
@@ -151,28 +151,28 @@ const Footer = () => {
             <ul className="space-y-4">
               <li>
                 <a 
-                  href="tel:+221770000000" 
+                  href="tel:+22666395254" 
                   className="flex items-start gap-3 hover:text-primary-400 transition-colors"
                 >
                   <Phone size={20} className="text-primary-500 flex-shrink-0 mt-0.5" />
                   <div>
-                    <span className="block">+221 77 000 00 00</span>
-                    <span className="block">+221 33 000 00 00</span>
+                    <span className="block">+226 66 39 52 54</span>
+                    <span className="block">+226 25 00 00 00</span>
                   </div>
                 </a>
               </li>
               <li>
                 <a 
-                  href="mailto:contact@gicos.sn" 
+                  href="mailto:gicossarl10@gmail.com" 
                   className="flex items-center gap-3 hover:text-primary-400 transition-colors"
                 >
                   <Mail size={20} className="text-primary-500 flex-shrink-0" />
-                  <span>contact@gicos.sn</span>
+                  <span>gicossarl10@gmail.com</span>
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin size={20} className="text-primary-500 flex-shrink-0 mt-0.5" />
-                <span>Dakar, Sénégal<br />Quartier Grand-Dakar</span>
+                <span>Ouagadougou, Burkina Faso<br />Koubri</span>
               </li>
             </ul>
           </div>

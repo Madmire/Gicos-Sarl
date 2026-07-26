@@ -60,7 +60,7 @@ const HomePage = () => {
   ];
 
   const whyChooseUs = [
-    { title: 'Expertise locale', description: 'Une connaissance approfondie du marché immobilier sénégalais.' },
+    { title: 'Expertise locale', description: 'Une connaissance approfondie du marché immobilier burkinabè.' },
     { title: 'Service personnalisé', description: 'Un accompagnement sur mesure pour chaque projet.' },
     { title: 'Transparence', description: 'Des transactions claires et sécurisées.' },
     { title: 'Qualité garantie', description: 'Des biens soigneusement sélectionnés et vérifiés.' },
@@ -87,12 +87,12 @@ const HomePage = () => {
 
             {/* Logo et nom */}
             <div className="flex items-center gap-4 mb-8 animate-fade-in-up animate-delay-100">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-premium">
-                <span className="text-primary-800 font-bold text-3xl">G</span>
+              <div className="w-16 h-16 bg-white rounded-2xl overflow-hidden p-2 shadow-premium">
+                <img src="/logo.png" alt="GICOS" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h1 className="font-display text-4xl md:text-5xl font-bold text-white">GICOS</h1>
-                <p className="text-white/70">Galaxie Immobilière Construction et Services</p>
+                <p className="text-white/70">Galaxie Immobiliere Construction et Services</p>
               </div>
             </div>
 
@@ -105,7 +105,7 @@ const HomePage = () => {
             {/* Description */}
             <p className="text-xl text-white/80 mb-10 max-w-xl animate-fade-in-up animate-delay-300">
               Votre partenaire de confiance pour tous vos projets immobiliers, 
-              de construction et de services au Sénégal.
+              de construction et de services au Burkina Faso.
             </p>
 
             {/* Boutons */}
@@ -330,13 +330,13 @@ const HomePage = () => {
               </p>
 
               <div className="space-y-6">
-                <a href="tel:+221770000000" className="flex items-center gap-4 text-gray-700 hover:text-primary-700 transition-colors">
+                <a href="tel:+22666395254" className="flex items-center gap-4 text-gray-700 hover:text-primary-700 transition-colors">
                   <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
                     <Phone className="w-5 h-5 text-primary-700" />
                   </div>
                   <div>
                     <p className="font-semibold">Téléphone</p>
-                    <p className="text-gray-500">+221 77 000 00 00</p>
+                    <p className="text-gray-500">+226 66 39 52 54</p>
                   </div>
                 </a>
 
@@ -346,7 +346,7 @@ const HomePage = () => {
                   </div>
                   <div>
                     <p className="font-semibold">Email</p>
-                    <p className="text-gray-500">contact@gicos.sn</p>
+                    <p className="text-gray-500">gicossarl10@gmail.com</p>
                   </div>
                 </a>
 
@@ -356,7 +356,7 @@ const HomePage = () => {
                   </div>
                   <div>
                     <p className="font-semibold">Adresse</p>
-                    <p className="text-gray-500">Dakar, Sénégal - Quartier Grand-Dakar</p>
+                    <p className="text-gray-500">Koubri, Ouagadougou, Burkina Faso</p>
                   </div>
                 </div>
               </div>

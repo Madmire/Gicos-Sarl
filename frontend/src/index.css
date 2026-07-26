@@ -4,14 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Base Styles (Flowbite + TailAdmin) ===== */
+/* ===== Base Styles ===== */
 @layer base {
   html {
     scroll-behavior: smooth;
   }
   
   body {
-    @apply font-inter text-base font-normal text-body bg-whiten antialiased;
+    @apply font-inter text-base font-normal text-gray-600 bg-gray-50 antialiased;
   }
 }
 

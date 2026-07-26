@@ -249,7 +249,7 @@ const AdminPropertyForm = () => {
                     onChange={handleChange}
                     required
                     className="input"
-                    placeholder="Dakar"
+                    placeholder="Ouagadougou"
                   />
                 </div>
               </div>

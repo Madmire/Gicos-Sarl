@@ -1,6 +1,6 @@
 /**
  * Composant formulaire de contact
- * GICOS - Galaxie Immobilière Construction et Services
+ * GICOS - Galaxie Immobiliere Construction et Services
  */
 
 import React, { useState } from 'react';
@@ -37,7 +37,7 @@ const ContactForm = ({ propertyId = null, compact = false }) => {
       setSuccess(true);
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (err) {
-      setError('Une erreur est survenue. Veuillez réessayer.');
+      setError('Une erreur est survenue. Veuillez reessayer.');
     } finally {
       setLoading(false);
     }
@@ -47,9 +47,9 @@ const ContactForm = ({ propertyId = null, compact = false }) => {
     return (
       <div className={`${compact ? 'p-6' : 'p-8'} bg-emerald-50 rounded-2xl text-center`}>
         <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Message envoyé !</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Message envoye !</h3>
         <p className="text-gray-600 mb-4">
-          Nous vous répondrons dans les plus brefs délais.
+          Nous vous repondrons dans les plus brefs delais.
         </p>
         <button
           onClick={() => setSuccess(false)}
@@ -99,7 +99,7 @@ const ContactForm = ({ propertyId = null, compact = false }) => {
         </div>
 
         <div>
-          <label htmlFor="phone" className="label">Téléphone</label>
+          <label htmlFor="phone" className="label">Telephone</label>
           <input
             type="tel"
             id="phone"
@@ -107,7 +107,7 @@ const ContactForm = ({ propertyId = null, compact = false }) => {
             value={formData.phone}
             onChange={handleChange}
             className="input"
-            placeholder="+221 77 000 00 00"
+            placeholder="+226 77 00 00 00"
           />
         </div>
       </div>
@@ -132,7 +132,10 @@ const ContactForm = ({ propertyId = null, compact = false }) => {
         className="btn-primary w-full"
       >
         {loading ? (
-          <ButtonLoading />
+          <>
+            <ButtonLoading />
+            <span className="ml-2">Envoi en cours...</span>
+          </>
         ) : (
           <>
             <Send size={18} className="mr-2" />

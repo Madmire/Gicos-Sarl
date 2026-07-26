@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Images } from 'lucide-react';
+import { Image } from 'lucide-react';
 import Lightbox from '../components/Lightbox';
 import { PageLoading } from '../components/Loading';
 import { galleryAPI, getImageUrl } from '../api';
@@ -142,7 +142,7 @@ const GalleryPage = () => {
         ) : (
           <div className="text-center py-20">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Images className="w-10 h-10 text-gray-400" />
+              <Image className="w-10 h-10 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Aucune image dans cette catégorie

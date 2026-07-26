@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard,
   Building2,
-  Images,
+  Image,
   Wrench,
   MessageSquare,
   Users,
@@ -29,7 +29,7 @@ const AdminLayout = () => {
   const menuItems = [
     { name: 'Tableau de bord', path: '/admin', icon: LayoutDashboard },
     { name: 'Annonces', path: '/admin/annonces', icon: Building2 },
-    { name: 'Galerie', path: '/admin/galerie', icon: Images },
+    { name: 'Galerie', path: '/admin/galerie', icon: Image },
     { name: 'Services', path: '/admin/services', icon: Wrench },
     { name: 'Messages', path: '/admin/messages', icon: MessageSquare },
     { name: 'Témoignages', path: '/admin/temoignages', icon: Users },
@@ -62,8 +62,8 @@ const AdminLayout = () => {
         {/* Logo */}
         <div className="h-20 flex items-center justify-between px-6 border-b border-strokedark">
           <Link to="/admin" className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gold-500 rounded-xl flex items-center justify-center">
-              <span className="text-boxdark font-bold text-xl">G</span>
+            <div className="w-12 h-12 rounded-xl overflow-hidden bg-white p-1">
+              <img src="/logo.png" alt="GICOS" className="w-full h-full object-contain" />
             </div>
             <div>
               <h1 className="font-display font-bold text-xl text-white">GICOS</h1>

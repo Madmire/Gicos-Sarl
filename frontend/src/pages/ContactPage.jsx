@@ -12,25 +12,25 @@ const ContactPage = () => {
     {
       icon: Phone,
       title: 'Téléphone',
-      content: ['+221 77 000 00 00', '+221 33 000 00 00'],
-      link: 'tel:+221770000000'
+      content: ['+226 66 39 52 54'],
+      link: 'tel:+22666395254'
     },
     {
       icon: Mail,
       title: 'Email',
-      content: ['contact@gicos.sn', 'info@gicos.sn'],
-      link: 'mailto:contact@gicos.sn'
+      content: ['gicossarl10@gmail.com'],
+      link: 'mailto:gicossarl10@gmail.com'
     },
     {
       icon: MapPin,
       title: 'Adresse',
-      content: ['Quartier Grand-Dakar', 'Dakar, Sénégal'],
+      content: ['Koubri', 'Ouagadougou, Burkina Faso'],
       link: null
     },
     {
       icon: Clock,
       title: 'Horaires',
-      content: ['Lun - Ven: 8h - 18h', 'Sam: 9h - 14h'],
+      content: ['Lun - Ven: 8h - 18h', 'Sam: 9h - 15h'],
       link: null
     }
   ];
@@ -126,7 +126,7 @@ const ContactPage = () => {
           <div className="card-premium overflow-hidden">
             <div className="aspect-[21/9] bg-gray-200">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15434.890874788892!2d-17.45!3d14.7167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xec172f5b3c5bb71%3A0xb17c17d92d5f9356!2sGrand-Dakar%2C%20Dakar%2C%20S%C3%A9n%C3%A9gal!5e0!3m2!1sfr!2sfr!4v1706000000000!5m2!1sfr!2sfr"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62178.35307367945!2d-1.5870855!3d12.3714277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xe2ebe6c951862c1%3A0x4d7d1b4d8a1b4e20!2sOuagadougou%2C%20Burkina%20Faso!5e0!3m2!1sfr!2sfr!4v1706000000000!5m2!1sfr!2sfr"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

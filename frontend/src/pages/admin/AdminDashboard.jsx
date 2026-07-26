@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Building2, 
-  Images, 
+  Image, 
   MessageSquare, 
   TrendingUp,
   Plus,
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
     { 
       title: 'Images galerie', 
       value: stats.gallery, 
-      icon: Images, 
+      icon: Image, 
       color: 'bg-emerald-500',
       link: '/admin/galerie'
     },
@@ -179,7 +179,7 @@ const AdminDashboard = () => {
               className="flex items-center gap-4 p-4 rounded-xl border-2 border-dashed border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-colors group"
             >
               <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                <Images className="w-5 h-5 text-emerald-700" />
+                <Image className="w-5 h-5 text-emerald-700" />
               </div>
               <div>
                 <p className="font-medium text-gray-900">Gérer la galerie</p>
