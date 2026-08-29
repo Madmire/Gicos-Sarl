@@ -5,6 +5,7 @@ GICOS - Galaxie Immobilière Construction et Services
 
 from datetime import datetime, timedelta
 from typing import Optional
+import os
 from jose import JWTError, jwt
 import bcrypt
 from fastapi import Depends, HTTPException, status
@@ -14,8 +15,8 @@ from database import get_db
 from models import User
 from schemas import TokenData
 
-# Configuration de sécurité
-SECRET_KEY = "gicos-secret-key-change-in-production-2024"
+# Configuration de sécurité (SECRET_KEY via env en production)
+SECRET_KEY = os.getenv("SECRET_KEY", "gicos-secret-key-change-in-production-2024")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 heures
 

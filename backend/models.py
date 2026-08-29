@@ -52,7 +52,7 @@ class PropertyImage(Base):
     __tablename__ = "property_images"
 
     id = Column(Integer, primary_key=True, index=True)
-    filename = Column(String(255), nullable=False)
+    filename = Column(String(500), nullable=False)
     property_id = Column(Integer, ForeignKey("properties.id", ondelete="CASCADE"), nullable=False)
     is_primary = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -66,7 +66,7 @@ class Gallery(Base):
     __tablename__ = "gallery"
 
     id = Column(Integer, primary_key=True, index=True)
-    filename = Column(String(255), nullable=False)
+    filename = Column(String(500), nullable=False)
     filepath = Column(String(500), nullable=False)
     image_type = Column(String(50), nullable=False)  # immobilier, construction, electricite, etc.
     title = Column(String(200), nullable=True)

@@ -3,10 +3,8 @@ Router pour la gestion des annonces immobilières
 GICOS - Galaxie Immobilière Construction et Services
 """
 
-import os
-import uuid
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Query
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from database import get_db
@@ -19,10 +17,9 @@ from schemas import (
     PropertyImageResponse
 )
 from auth import get_current_admin_user
+from storage import save_upload, delete_media
 
 router = APIRouter(prefix="/api/properties", tags=["Annonces"])
-
-UPLOAD_DIR = "uploads"
 
 
 def get_primary_image(property_obj: Property) -> Optional[str]:
@@ -278,9 +275,7 @@ async def delete_property(
     
     # Supprimer les fichiers images
     for image in property_obj.images:
-        file_path = os.path.join(UPLOAD_DIR, image.filename)
-        if os.path.exists(file_path):
-            os.remove(file_path)
+        delete_media(image.filename)
     
     db.delete(property_obj)
     db.commit()
@@ -304,31 +299,19 @@ async def upload_property_images(
             detail="Annonce non trouvée"
         )
     
-    # Créer le dossier uploads si nécessaire
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-    
     uploaded_images = []
     is_first = len(property_obj.images) == 0
     
     for file in files:
-        # Générer un nom unique
-        ext = os.path.splitext(file.filename)[1]
-        unique_filename = f"{uuid.uuid4()}{ext}"
-        file_path = os.path.join(UPLOAD_DIR, unique_filename)
+        stored = await save_upload(file, folder="gicos/properties")
         
-        # Sauvegarder le fichier
-        with open(file_path, "wb") as f:
-            content = await file.read()
-            f.write(content)
-        
-        # Créer l'entrée en base
         image = PropertyImage(
-            filename=unique_filename,
+            filename=stored,
             property_id=property_id,
             is_primary=is_first
         )
         db.add(image)
-        uploaded_images.append(unique_filename)
+        uploaded_images.append(stored)
         is_first = False
     
     db.commit()
@@ -355,10 +338,7 @@ async def delete_property_image(
             detail="Image non trouvée"
         )
     
-    # Supprimer le fichier
-    file_path = os.path.join(UPLOAD_DIR, image.filename)
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    delete_media(image.filename)
     
     db.delete(image)
     db.commit()

@@ -179,9 +179,22 @@ Remplacez le logo dans `frontend/public/favicon.svg` et adaptez les composants N
 
 ## Production
 
+Architecture : **Vercel** (frontend) + **Render** (API) + **Neon** (PostgreSQL) + **Cloudinary** (images).
+
+### Variables
+
+**Backend (Render)** — voir `backend/.env.example` :
+- `DATABASE_URL` (Neon)
+- `SECRET_KEY`
+- `CORS_ORIGINS` (URL Vercel)
+- `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET`
+
+**Frontend (Vercel)** — Root Directory = `frontend` :
+- `VITE_API_URL` = URL Render (ex. `https://gicos-api.onrender.com`)
+
 ### Backend
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000
+uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
 ### Frontend

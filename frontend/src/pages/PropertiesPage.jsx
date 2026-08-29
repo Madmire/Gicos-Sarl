@@ -22,7 +22,7 @@ const PropertiesPage = () => {
   // Filtres
   const [filters, setFilters] = useState({
     property_type: searchParams.get('type') || '',
-    city: searchParams.get('city') || '',
+    city: searchParams.get('city') || searchParams.get('location') || '',
     category: searchParams.get('category') || '',
     min_price: searchParams.get('min_price') || '',
     max_price: searchParams.get('max_price') || '',

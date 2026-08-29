@@ -5,12 +5,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, ChevronDown } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronDown, UserRound } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, user } = useAuth();
 
   // Écouter le scroll pour changer le style de la navbar
   useEffect(() => {
@@ -71,12 +73,12 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 lg:w-12 lg:h-12 rounded-xl overflow-hidden">
+              <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl overflow-hidden shadow-sm ring-1 ring-gray-200 bg-white">
                 <img src="/logo.png" alt="GICOS" className="w-full h-full object-contain" />
               </div>
               <div>
-                <h1 className="font-display font-bold text-lg lg:text-xl text-gray-900">GICOS</h1>
-                <p className="text-[10px] lg:text-xs text-gray-500 hidden sm:block">Immobilier - Construction - Services</p>
+                <h1 className="font-display font-bold text-xl lg:text-2xl text-gray-900 leading-none">GICOS</h1>
+                <p className="text-[10px] lg:text-xs text-gray-500 hidden sm:block mt-1">Immobilier - Construction - Services</p>
               </div>
             </Link>
 
@@ -100,7 +102,7 @@ const Navbar = () => {
               </ul>
             </div>
 
-            {/* CTA Button - Flowbite style */}
+            {/* CTA Buttons - Flowbite style */}
             <div className="hidden lg:flex items-center gap-3">
               <Link 
                 to="/annonces" 
@@ -108,6 +110,16 @@ const Navbar = () => {
               >
                 Voir les annonces
               </Link>
+              {isAuthenticated && user && (
+                <Link
+                  to="/admin"
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm hover:text-primary-700 hover:border-primary-200 hover:bg-primary-50 transition-all"
+                  aria-label="Espace admin"
+                  title="Espace admin"
+                >
+                  <UserRound size={18} />
+                </Link>
+              )}
             </div>
 
             {/* Mobile menu button - Flowbite style */}
@@ -148,12 +160,24 @@ const Navbar = () => {
                 <Phone size={16} className="text-primary-600" />
                 <a href="tel:+22666395254" className="hover:text-primary-700">+226 66 39 52 54</a>
               </div>
-              <Link 
-                to="/annonces" 
-                className="block w-full text-center px-5 py-3 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800"
-              >
-                Voir les annonces
-              </Link>
+              <div className="flex items-center justify-between gap-3">
+                <Link 
+                  to="/annonces" 
+                  className="block w-full text-center px-5 py-3 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800"
+                >
+                  Voir les annonces
+                </Link>
+                {isAuthenticated && user && (
+                  <Link
+                    to="/admin"
+                    className="flex items-center justify-center w-11 h-11 rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm hover:text-primary-700 hover:border-primary-200 hover:bg-primary-50"
+                    aria-label="Espace admin"
+                    title="Espace admin"
+                  >
+                    <UserRound size={18} />
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -4,17 +4,25 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, 
-  Building2, 
+  Building2,
+  Hammer,
+  Zap,
+  Grid3X3,
+  Droplets,
+  Paintbrush,
+  Volume2,
   Users, 
   Award, 
   ThumbsUp,
   Phone,
   Mail,
   MapPin,
-  CheckCircle
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import PropertyCard from '../components/PropertyCard';
 import ServiceCard from '../components/ServiceCard';
@@ -29,6 +37,11 @@ const HomePage = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchType, setSearchType] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
+  const [typedText, setTypedText] = useState('');
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,11 +65,57 @@ const HomePage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const text = 'GICOS Sarl';
+    let index = 0;
+
+    const timer = setInterval(() => {
+      index += 1;
+      setTypedText(text.slice(0, index));
+
+      if (index >= text.length) {
+        clearInterval(timer);
+      }
+    }, 120);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const stats = [
-    { icon: Building2, value: '150+', label: 'Biens vendus' },
-    { icon: Users, value: '500+', label: 'Clients satisfaits' },
-    { icon: Award, value: '10+', label: 'Années d\'expérience' },
-    { icon: ThumbsUp, value: '98%', label: 'Satisfaction client' },
+    { icon: Building2, value: '45+', label: 'Biens traités' },
+    { icon: Users, value: '180+', label: 'Clients accompagnés' },
+    { icon: Award, value: '8+', label: 'Années d\'expérience' },
+    { icon: ThumbsUp, value: '92%', label: 'Satisfaction client' },
+  ];
+
+  const featuredPillars = [
+    {
+      name: 'Achat & vente',
+      description: 'Une sélection rigoureuse de biens résidentiels et professionnels, selon vos objectifs.',
+      icon: Building2,
+    },
+    {
+      name: 'Construction',
+      description: 'Des projets structurés, suivis et livrés avec un souci constant d’excellence.',
+      icon: Hammer,
+    },
+    {
+      name: 'Travaux & finitions',
+      description: 'Peinture, plomberie, électricité, aménagement et finitions de qualité.',
+      icon: Zap,
+    },
+    {
+      name: 'Conseil & gestion',
+      description: 'Un accompagnement clair, transparent et orienté vers des décisions sûres.',
+      icon: Users,
+    },
+  ];
+
+  const expertiseCards = [
+    { name: 'Acquisition', description: 'Recherche de biens adaptés à votre budget et à vos objectifs.', icon: Building2 },
+    { name: 'Construction', description: 'Cadrage, suivi et réalisation d’ouvrages résidents et professionnels.', icon: Hammer },
+    { name: 'Travaux & finitions', description: 'Electricité, plomberie, carrelage et finition soignée.', icon: Zap },
+    { name: 'Conseil & suivi', description: 'Accompagnement jusqu’à la livraison et à la sécurisation de votre projet.', icon: Users },
   ];
 
   const whyChooseUs = [
@@ -66,67 +125,89 @@ const HomePage = () => {
     { title: 'Qualité garantie', description: 'Des biens soigneusement sélectionnés et vérifiés.' },
   ];
 
+  const visibleTestimonials = testimonials.length > 0
+    ? Array.from({ length: 3 }, (_, index) => testimonials[(testimonialIndex + index) % testimonials.length])
+    : [];
+
   return (
     <div>
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-        </div>
+      {/* Hero Section (improved layout) */}
+      <section className="relative min-h-[84vh] overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900">
+        <div className="container-custom py-20 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            {/* Left: content */}
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm mb-6">
+                <span className="w-2 h-2 bg-gold-400 rounded-full animate-pulse" />
+                Immobilier • Construction • Services
+              </div>
 
-        <div className="container-custom relative z-10 py-20">
-          <div className="max-w-3xl">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm mb-8 animate-fade-in-up">
-              <span className="w-2 h-2 bg-gold-400 rounded-full animate-pulse" />
-              Immobilier • Construction • Sonorisation
+              <h1 className="font-display text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4">
+                <span className="block">Bienvenue chez</span>
+                <span className="hero-typewriter text-gold-400">{typedText}</span>
+              </h1>
+              <p className="text-white/80 text-lg md:text-xl mb-6">
+                Votre partenaire de confiance pour tous vos projets immobiliers,
+                de construction et de services techniques au Burkina Faso.
+              </p>
+              {/* Search bar inspired by dar.ma */}
+              <form
+                className="bg-white p-4 rounded-xl shadow mt-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const q = new URLSearchParams();
+                  if (searchType) q.set('type', searchType);
+                  if (searchLocation) q.set('city', searchLocation);
+                  navigate(`/annonces?${q.toString()}`);
+                }}
+              >
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <select
+                    value={searchType}
+                    onChange={(e) => setSearchType(e.target.value)}
+                    className="w-full sm:w-48 px-3 py-2 border rounded-md text-sm"
+                  >
+                    <option value="">Type (Tous)</option>
+                    <option value="vente">A vendre</option>
+                    <option value="location">A louer</option>
+                  </select>
+
+                  <input
+                    value={searchLocation}
+                    onChange={(e) => setSearchLocation(e.target.value)}
+                    placeholder="Ville, quartier..."
+                    className="flex-1 px-3 py-2 border rounded-md text-sm"
+                  />
+
+                  <button type="submit" className="px-4 py-2 bg-primary-600 text-white rounded-md text-sm font-medium">
+                    Rechercher
+                  </button>
+                </div>
+              </form>
+
+              <div className="flex flex-wrap gap-4 mt-6">
+                <Link to="/annonces" className="px-6 py-3 rounded-full bg-white text-slate-900 font-semibold shadow-lg inline-flex items-center gap-2">
+                  Voir les annonces
+                  <ArrowRight size={18} />
+                </Link>
+                <Link to="/contact" className="px-6 py-3 rounded-full bg-slate-800/50 border border-white/20 text-white font-medium inline-flex items-center gap-2">
+                  Nous contacter
+                </Link>
+              </div>
             </div>
 
-            {/* Logo et nom */}
-            <div className="flex items-center gap-4 mb-8 animate-fade-in-up animate-delay-100">
-              <div className="w-16 h-16 bg-white rounded-2xl overflow-hidden p-2 shadow-premium">
-                <img src="/logo.png" alt="GICOS" className="w-full h-full object-contain" />
+            {/* Right: hero image preview */}
+            <div className="w-full flex justify-center md:justify-end">
+              <div className="hero-image-panel w-full max-w-[560px] h-[420px]">
+                <img src="/home1.png" alt="Maison moderne" className="hero-image-main hero-image-one" />
+                <img src="/home2.png" alt="Maison en construction" className="hero-image-main hero-image-two" />
               </div>
-              <div>
-                <h1 className="font-display text-4xl md:text-5xl font-bold text-white">GICOS</h1>
-                <p className="text-white/70">Galaxie Immobiliere Construction et Services</p>
-              </div>
-            </div>
-
-            {/* Titre principal */}
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-fade-in-up animate-delay-200">
-              Trouvez votre <br/>
-              <span className="text-gold-400">bien idéal</span>
-            </h2>
-
-            {/* Description */}
-            <p className="text-xl text-white/80 mb-10 max-w-xl animate-fade-in-up animate-delay-300">
-              Votre partenaire de confiance pour tous vos projets immobiliers, 
-              de construction et de services au Burkina Faso.
-            </p>
-
-            {/* Boutons */}
-            <div className="flex flex-wrap gap-4 animate-fade-in-up animate-delay-300">
-              <Link to="/annonces" className="btn-secondary">
-                Voir les annonces
-                <ArrowRight size={20} className="ml-2" />
-              </Link>
-              <Link to="/contact" className="btn-outline border-white text-white hover:bg-white hover:text-primary-800">
-                Nous contacter
-              </Link>
             </div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-white/50 rounded-full" />
-          </div>
-        </div>
+        {/* Decorative pattern */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{backgroundImage: `radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)`, backgroundSize: '30px 30px'}} />
       </section>
 
       {/* Stats Section */}
@@ -149,8 +230,56 @@ const HomePage = () => {
         </div>
       </section>
 
+      <section className="section bg-white">
+        <div className="container-custom">
+          <div className="mb-10 text-center">
+            <p className="section-kicker">Ce que nous faisons</p>
+            <h2 className="section-title">Des solutions immobilières et de construction sur mesure</h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {featuredPillars.map(({ name, description, icon: Icon }) => (
+              <div key={name} className="premium-card group">
+                <div className="premium-card-icon">
+                  <Icon className="h-7 w-7" strokeWidth={2.2} />
+                </div>
+                <h3 className="premium-card-title">{name}</h3>
+                <p className="premium-card-text">{description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Expertise / approach cards */}
+      <section className="section bg-white">
+        <div className="container-custom">
+          <div className="mb-12 grid items-end gap-4 lg:grid-cols-[1.1fr_2.5fr]">
+            <h2 className="section-heading-title mb-0 text-left">Notre approche</h2>
+            <p className="section-heading-copy mb-0 text-left">
+              Une expertise globale pensée pour sécuriser et accompagner vos projets.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {expertiseCards.map(({ name, description, icon: Icon }) => (
+              <div
+                key={name}
+                className="group rounded-3xl border border-gray-200 bg-gradient-to-b from-white to-gray-50 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary-200"
+              >
+                <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100 text-primary-700 shadow-inner">
+                  <Icon className="h-8 w-8" strokeWidth={2.2} />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-3">{name}</h3>
+                <p className="text-gray-600 leading-relaxed">{description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
-      <section className="section bg-gray-50">
+      <section className="section bg-white">
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="section-title">Nos Services</h2>
@@ -167,7 +296,7 @@ const HomePage = () => {
                 <ServiceCard 
                   key={service.id} 
                   service={service}
-                  onClick={() => {}}
+                  onClick={() => navigate(`/services?s=${service.slug}`)}
                 />
               ))}
             </div>
@@ -227,9 +356,10 @@ const HomePage = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {galleryImages.slice(0, 8).map((image, index) => (
-                <div 
-                  key={image.id} 
-                  className={`relative overflow-hidden rounded-2xl ${
+                <Link
+                  key={image.id}
+                  to="/galerie"
+                  className={`relative overflow-hidden rounded-2xl block ${
                     index === 0 ? 'md:col-span-2 md:row-span-2' : ''
                   }`}
                 >
@@ -238,7 +368,7 @@ const HomePage = () => {
                     alt={image.title || 'Réalisation GICOS'}
                     className="w-full h-full object-cover aspect-square hover:scale-105 transition-transform duration-500"
                   />
-                </div>
+                </Link>
               ))}
             </div>
 
@@ -255,10 +385,10 @@ const HomePage = () => {
       {/* Why Choose Us */}
       <section className="section bg-primary-800 text-white">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                Pourquoi choisir <span className="text-gold-400">GICOS</span> ?
+                Pourquoi choisir <span className="text-gold-400">GICOS Sarl</span> ?
               </h2>
               <p className="text-white/80 mb-8 text-lg">
                 Depuis plus de 10 ans, nous accompagnons nos clients dans la réalisation 
@@ -280,19 +410,31 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8">
-              <div className="grid grid-cols-2 gap-6">
-                {stats.map((stat, index) => {
-                  const Icon = stat.icon;
-                  return (
-                    <div key={index} className="text-center">
-                      <Icon className="w-10 h-10 mx-auto mb-3 text-gold-400" />
-                      <div className="font-display text-3xl font-bold mb-1">{stat.value}</div>
-                      <div className="text-white/70 text-sm">{stat.label}</div>
-                    </div>
-                  );
-                })}
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gold-400/15 flex items-center justify-center">
+                  <Award className="w-6 h-6 text-gold-400" />
+                </div>
+                <div>
+                  <p className="text-sm uppercase tracking-[0.2em] text-white/60">Notre engagement</p>
+                  <h3 className="font-display text-2xl font-bold text-white">Qualité & confiance</h3>
+                </div>
               </div>
+
+              <ul className="space-y-4 text-white/80">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-gold-400 mt-1" />
+                  <span>Accompagnement complet, de l’idée au suivi final.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-gold-400 mt-1" />
+                  <span>Des solutions adaptées à chaque besoin immobilier ou professionnel.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-gold-400 mt-1" />
+                  <span>Un service réactif, clair et orienté satisfaction client.</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -302,16 +444,50 @@ const HomePage = () => {
       {testimonials.length > 0 && (
         <section className="section bg-white">
           <div className="container-custom">
-            <div className="text-center mb-12">
-              <h2 className="section-title">Ce que disent nos clients</h2>
-              <p className="section-subtitle">
-                La satisfaction de nos clients est notre plus belle récompense
+            <div className="mb-12 text-center">
+              <h2 className="section-heading-title mx-auto max-w-3xl">Ce que les gens disent</h2>
+              <p className="section-heading-copy mx-auto mt-4 max-w-4xl text-gray-500">
+                Notre équipe chevronnée excelle dans l’immobilier avec des années de navigation réussie sur le marché, offrant des décisions éclairées et des résultats optimaux.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial) => (
-                <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
+                className="absolute left-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-3xl text-gray-700 shadow-sm transition hover:border-gray-300 hover:text-gray-900"
+                aria-label="Témoignage précédent"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+
+              <div className="mx-14 grid gap-6 md:grid-cols-3">
+                {visibleTestimonials.map((testimonial) => (
+                  <TestimonialCard key={`${testimonial.id}-${testimonial.name}`} testimonial={testimonial} />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setTestimonialIndex((prev) => (prev + 1) % testimonials.length)}
+                className="absolute right-0 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-3xl text-gray-700 shadow-sm transition hover:border-gray-300 hover:text-gray-900"
+                aria-label="Témoignage suivant"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="mt-8 flex justify-center gap-3">
+              {Array.from({ length: testimonials.length }).map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setTestimonialIndex(index)}
+                  className={`h-3 w-3 rounded-full transition ${
+                    index === testimonialIndex ? 'bg-[#1f2937]' : 'bg-gray-300'
+                  }`}
+                  aria-label={`Voir le témoignage ${index + 1}`}
+                />
               ))}
             </div>
           </div>
@@ -340,7 +516,7 @@ const HomePage = () => {
                   </div>
                 </a>
 
-                <a href="mailto:contact@gicos.sn" className="flex items-center gap-4 text-gray-700 hover:text-primary-700 transition-colors">
+                <a href="mailto:gicossarl10@gmail.com" className="flex items-center gap-4 text-gray-700 hover:text-primary-700 transition-colors">
                   <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
                     <Mail className="w-5 h-5 text-primary-700" />
                   </div>

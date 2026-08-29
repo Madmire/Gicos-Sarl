@@ -38,7 +38,7 @@ const PropertyCard = ({ property }) => {
             <span className="text-gray-400">Pas d'image</span>
           </div>
         )}
-        
+
         {/* Badge type */}
         <div className="absolute top-4 left-4">
           <span className={`badge ${property_type === 'vente' ? 'badge-vente' : 'badge-location'}`}>
@@ -46,9 +46,16 @@ const PropertyCard = ({ property }) => {
           </span>
         </div>
 
-        {/* Prix */}
-        <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2">
+        {/* Sponsored */}
+        {property.sponsored && (
+          <div className="absolute top-4 right-4">
+            <span className="text-xs bg-yellow-400 text-slate-900 font-semibold px-2 py-1 rounded">SPONSORISÉ</span>
+          </div>
+        )}
+
+        {/* Price top-right */}
+        <div className="absolute top-12 right-4">
+          <div className="bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2 shadow">
             <span className="text-primary-800 font-bold text-lg">
               {formatPrice(price)}
             </span>

@@ -3,8 +3,6 @@ Router pour la gestion de la galerie
 GICOS - Galaxie Immobilière Construction et Services
 """
 
-import os
-import uuid
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from sqlalchemy.orm import Session
@@ -13,10 +11,9 @@ from database import get_db
 from models import Gallery, User
 from schemas import GalleryResponse
 from auth import get_current_admin_user
+from storage import save_upload, delete_media, media_path_for_db
 
 router = APIRouter(prefix="/api/gallery", tags=["Galerie"])
-
-UPLOAD_DIR = "uploads"
 
 # Types d'images valides pour la galerie
 VALID_IMAGE_TYPES = [
@@ -119,36 +116,25 @@ async def upload_gallery_images(
             detail=f"Type d'image invalide. Types valides: {', '.join(VALID_IMAGE_TYPES)}"
         )
     
-    # Créer le dossier uploads si nécessaire
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-    
+    # Créer le dossier uploads si nécessaire (mode local uniquement)
     uploaded_images = []
     
     for file in files:
         # Vérifier que c'est une image
-        if not file.content_type.startswith("image/"):
+        if not file.content_type or not file.content_type.startswith("image/"):
             continue
         
-        # Générer un nom unique
-        ext = os.path.splitext(file.filename)[1]
-        unique_filename = f"gallery_{uuid.uuid4()}{ext}"
-        file_path = os.path.join(UPLOAD_DIR, unique_filename)
+        stored = await save_upload(file, folder="gicos/gallery")
         
-        # Sauvegarder le fichier
-        with open(file_path, "wb") as f:
-            content = await file.read()
-            f.write(content)
-        
-        # Créer l'entrée en base
         gallery_image = Gallery(
-            filename=unique_filename,
-            filepath=f"/uploads/{unique_filename}",
+            filename=stored,
+            filepath=media_path_for_db(stored),
             image_type=image_type,
             title=title,
             description=description
         )
         db.add(gallery_image)
-        uploaded_images.append(unique_filename)
+        uploaded_images.append(stored)
     
     db.commit()
     
@@ -210,9 +196,7 @@ async def delete_gallery_image(
         )
     
     # Supprimer le fichier
-    file_path = os.path.join(UPLOAD_DIR, image.filename)
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    delete_media(image.filename)
     
     db.delete(image)
     db.commit()
@@ -232,10 +216,7 @@ async def delete_multiple_gallery_images(
     for image_id in image_ids:
         image = db.query(Gallery).filter(Gallery.id == image_id).first()
         if image:
-            # Supprimer le fichier
-            file_path = os.path.join(UPLOAD_DIR, image.filename)
-            if os.path.exists(file_path):
-                os.remove(file_path)
+            delete_media(image.filename)
             
             db.delete(image)
             deleted_count += 1

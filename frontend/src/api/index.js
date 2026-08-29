@@ -5,8 +5,10 @@
 
 import axios from 'axios';
 
-// URL de base de l'API
-const API_BASE_URL = '/api';
+// En prod (Vercel) : VITE_API_URL = URL Render sans slash final
+// En local : proxy Vite vers /api et /uploads
+const API_ORIGIN = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const API_BASE_URL = API_ORIGIN ? `${API_ORIGIN}/api` : '/api';
 
 // Instance Axios configurée
 const api = axios.create({
@@ -226,11 +228,14 @@ export const testimonialsAPI = {
 
 // ==================== Utilitaires ====================
 
-// URL pour les images
+// URL pour les images (Cloudinary absolue, ou /uploads via API)
 export const getImageUrl = (filename) => {
   if (!filename) return null;
-  if (filename.startsWith('http')) return filename;
-  return `/uploads/${filename}`;
+  if (filename.startsWith('http://') || filename.startsWith('https://')) {
+    return filename;
+  }
+  const path = `/uploads/${filename}`;
+  return API_ORIGIN ? `${API_ORIGIN}${path}` : path;
 };
 
 // Formateur de prix

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   Building2, 
   Hammer, 
@@ -33,6 +34,7 @@ const ServicesPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeService, setActiveService] = useState(null);
   const detailsRef = useRef(null);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -40,7 +42,11 @@ const ServicesPage = () => {
         const response = await servicesAPI.getAll(true);
         setServices(response.data);
         if (response.data.length > 0) {
-          setActiveService(response.data[0]);
+          const slug = searchParams.get('s');
+          const fromQuery = slug
+            ? response.data.find((s) => s.slug === slug)
+            : null;
+          setActiveService(fromQuery || response.data[0]);
         }
       } catch (error) {
         console.error('Erreur:', error);
@@ -49,11 +55,10 @@ const ServicesPage = () => {
       }
     };
     fetchServices();
-  }, []);
+  }, [searchParams]);
 
   const handleServiceClick = (service) => {
     setActiveService(service);
-    // Scroll vers les détails sur mobile
     if (window.innerWidth < 1024 && detailsRef.current) {
       detailsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -239,10 +244,10 @@ const ServicesPage = () => {
             Contactez-nous dès maintenant pour discuter de votre projet. 
             Notre équipe est à votre écoute pour vous accompagner.
           </p>
-          <a href="/contact" className="btn-secondary inline-flex">
+          <Link to="/contact" className="btn-secondary inline-flex">
             Contactez-nous
             <ArrowRight size={20} className="ml-2" />
-          </a>
+          </Link>
         </div>
       </section>
     </div>

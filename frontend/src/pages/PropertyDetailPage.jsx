@@ -25,18 +25,31 @@ import ContactForm from '../components/ContactForm';
 import { PageLoading } from '../components/Loading';
 import { propertiesAPI, getImageUrl, formatPrice } from '../api';
 
+const FAVORITES_KEY = 'gicos_favorites';
+
+const getFavorites = () => {
+  try {
+    return JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+  } catch {
+    return [];
+  }
+};
+
 const PropertyDetailPage = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [favorited, setFavorited] = useState(false);
+  const [shareHint, setShareHint] = useState('');
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
         const response = await propertiesAPI.getById(id);
         setProperty(response.data);
+        setFavorited(getFavorites().includes(String(id)));
       } catch (err) {
         setError('Annonce non trouvée');
       } finally {
@@ -45,6 +58,37 @@ const PropertyDetailPage = () => {
     };
     fetchProperty();
   }, [id]);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = property?.title || 'Annonce GICOS';
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url, text: title });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      setShareHint('Lien copié !');
+      setTimeout(() => setShareHint(''), 2000);
+    } catch {
+      setShareHint('Partage annulé');
+      setTimeout(() => setShareHint(''), 2000);
+    }
+  };
+
+  const handleFavorite = () => {
+    const key = String(id);
+    const current = getFavorites();
+    let next;
+    if (current.includes(key)) {
+      next = current.filter((x) => x !== key);
+      setFavorited(false);
+    } else {
+      next = [...current, key];
+      setFavorited(true);
+    }
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
+  };
 
   if (loading) return <PageLoading />;
 
@@ -189,13 +233,34 @@ const PropertyDetailPage = () => {
                     {property.title}
                   </h1>
                 </div>
-                <div className="flex gap-2">
-                  <button className="p-3 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
+                <div className="flex gap-2 relative">
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    className="p-3 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+                    aria-label="Partager l’annonce"
+                    title="Partager"
+                  >
                     <Share2 size={20} className="text-gray-600" />
                   </button>
-                  <button className="p-3 bg-gray-100 rounded-xl hover:bg-red-50 hover:text-red-500 transition-colors">
-                    <Heart size={20} />
+                  <button
+                    type="button"
+                    onClick={handleFavorite}
+                    className={`p-3 rounded-xl transition-colors ${
+                      favorited
+                        ? 'bg-red-50 text-red-500'
+                        : 'bg-gray-100 hover:bg-red-50 hover:text-red-500 text-gray-600'
+                    }`}
+                    aria-label={favorited ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                    title={favorited ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                  >
+                    <Heart size={20} fill={favorited ? 'currentColor' : 'none'} />
                   </button>
+                  {shareHint && (
+                    <span className="absolute -bottom-8 right-0 text-xs bg-gray-900 text-white px-2 py-1 rounded-md whitespace-nowrap">
+                      {shareHint}
+                    </span>
+                  )}
                 </div>
               </div>
 

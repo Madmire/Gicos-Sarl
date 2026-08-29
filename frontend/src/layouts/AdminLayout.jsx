@@ -148,11 +148,16 @@ const AdminLayout = () => {
           </div>
 
           <div className="flex items-center gap-3 ml-auto">
-            {/* Notifications */}
-            <button className="relative p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+            {/* Notifications → messages */}
+            <Link
+              to="/admin/messages"
+              className="relative p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Messages"
+              title="Messages"
+            >
               <Bell size={22} />
               <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-meta-1 rounded-full border-2 border-white" />
-            </button>
+            </Link>
 
             {/* User dropdown */}
             <div className="flex items-center gap-3 pl-3 border-l border-gray-200">

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Linkedin } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, MessageCircle } from 'lucide-react';
 import ContactForm from '../components/ContactForm';
 
 const ContactPage = () => {
@@ -33,6 +33,27 @@ const ContactPage = () => {
       content: ['Lun - Ven: 8h - 18h', 'Sam: 9h - 15h'],
       link: null
     }
+  ];
+
+  const socialLinks = [
+    {
+      label: 'WhatsApp',
+      href: 'https://wa.me/22666395254',
+      icon: MessageCircle,
+      className: 'hover:bg-emerald-600',
+    },
+    {
+      label: 'Email',
+      href: 'mailto:gicossarl10@gmail.com',
+      icon: Mail,
+      className: 'hover:bg-primary-800',
+    },
+    {
+      label: 'Téléphone',
+      href: 'tel:+22666395254',
+      icon: Phone,
+      className: 'hover:bg-primary-800',
+    },
   ];
 
   return (
@@ -81,28 +102,25 @@ const ContactPage = () => {
               })}
             </div>
 
-            {/* Social media */}
+            {/* Social / contact rapide */}
             <div className="card p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Suivez-nous</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">Nous joindre rapidement</h3>
               <div className="flex gap-3">
-                <a 
-                  href="#" 
-                  className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-700 hover:bg-primary-800 hover:text-white transition-colors"
-                >
-                  <Facebook size={22} />
-                </a>
-                <a 
-                  href="#" 
-                  className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-700 hover:bg-primary-800 hover:text-white transition-colors"
-                >
-                  <Instagram size={22} />
-                </a>
-                <a 
-                  href="#" 
-                  className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-700 hover:bg-primary-800 hover:text-white transition-colors"
-                >
-                  <Linkedin size={22} />
-                </a>
+                {socialLinks.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      target={item.href.startsWith('http') ? '_blank' : undefined}
+                      rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      aria-label={item.label}
+                      className={`w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-700 hover:text-white transition-colors ${item.className}`}
+                    >
+                      <Icon size={22} />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>

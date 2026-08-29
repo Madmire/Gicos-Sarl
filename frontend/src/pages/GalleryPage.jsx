@@ -3,7 +3,8 @@
  * GICOS - Galaxie Immobilière Construction et Services
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Image } from 'lucide-react';
 import Lightbox from '../components/Lightbox';
 import { PageLoading } from '../components/Loading';
@@ -15,6 +16,7 @@ const GalleryPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('');
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     const fetchTypes = async () => {
@@ -57,20 +59,52 @@ const GalleryPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-primary-800 text-white py-16">
-        <div className="container-custom">
-          <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-            Notre Galerie
-          </h1>
-          <p className="text-white/80 text-lg max-w-2xl">
-            Découvrez nos réalisations dans les domaines de l'immobilier, 
-            la construction et les services techniques
-          </p>
+      <div className="bg-gradient-to-b from-slate-900 via-primary-800 to-blue-800 text-white py-20">
+        <div className="container-custom grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-tight mb-4">
+              Notre Galerie
+            </h1>
+            <p className="text-white/85 text-lg md:text-xl max-w-2xl mb-6">
+              Découvrez une sélection de nos réalisations — immobilier, construction
+              et services techniques au Burkina Faso.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <button
+                type="button"
+                onClick={() => gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                className="px-6 py-3 rounded-full bg-white text-slate-900 font-semibold shadow-lg hover:scale-105 transition-transform"
+              >
+                Découvrir
+              </button>
+              <Link
+                to="/contact"
+                className="px-6 py-3 rounded-full bg-slate-800/60 border border-white/20 text-white font-medium hover:scale-105 transition-transform"
+              >
+                Demander un devis
+              </Link>
+            </div>
+          </div>
+
+          <div className="w-full flex justify-center md:justify-end">
+            {images[0] ? (
+              <div className="w-96 h-64 md:w-[520px] md:h-[340px] rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src={getImageUrl(images[0].filename)}
+                  alt={images[0].title || 'Aperçu galerie'}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-96 h-64 md:w-[520px] md:h-[340px] rounded-2xl bg-white/5 border border-white/10" />
+            )}
+          </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white shadow-soft sticky top-20 md:top-28 z-30">
+      <div ref={gridRef} className="bg-white shadow-lg sticky top-20 md:top-28 z-30 -mt-8 md:-mt-12">
         <div className="container-custom py-4">
           <div className="flex flex-wrap gap-3">
             <button
@@ -101,21 +135,21 @@ const GalleryPage = () => {
       </div>
 
       {/* Gallery grid */}
-      <div className="container-custom py-8">
+      <div className="container-custom py-12">
         {loading ? (
           <PageLoading />
         ) : images.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {images.map((image, index) => (
               <div
                 key={image.id}
                 onClick={() => openLightbox(index)}
-                className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-soft aspect-square"
+                className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg aspect-square hover:shadow-2xl transition-shadow"
               >
                 <img
                   src={getImageUrl(image.filename)}
                   alt={image.title || 'Image galerie'}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 
                 {/* Overlay on hover */}
@@ -123,7 +157,7 @@ const GalleryPage = () => {
                 
                 {/* Badge catégorie */}
                 <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-lg text-sm font-medium text-gray-800">
+                  <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-lg text-sm font-semibold text-slate-800">
                     {types.find(t => t.value === image.image_type)?.label || image.image_type}
                   </span>
                 </div>

@@ -16,7 +16,7 @@
     "react-router-dom": "^6.21.3",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.7.2",
-    "apexcharts": "^3.45.1",
+    "apexcharts": "^4.0.0",
     "react-apexcharts": "^1.4.1",
     "swiper": "^11.0.5"
   },

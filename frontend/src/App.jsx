@@ -18,6 +18,7 @@ import PropertyDetailPage from './pages/PropertyDetailPage';
 import GalleryPage from './pages/GalleryPage';
 import ServicesPage from './pages/ServicesPage';
 import ContactPage from './pages/ContactPage';
+import { MentionsLegalesPage, ConfidentialitePage } from './pages/LegalPages';
 
 // Pages admin
 import AdminLogin from './pages/admin/AdminLogin';
@@ -63,6 +64,8 @@ const AppRoutes = () => {
         <Route path="galerie" element={<GalleryPage />} />
         <Route path="services" element={<ServicesPage />} />
         <Route path="contact" element={<ContactPage />} />
+        <Route path="mentions-legales" element={<MentionsLegalesPage />} />
+        <Route path="politique-confidentialite" element={<ConfidentialitePage />} />
       </Route>
 
       {/* Page de connexion admin */}
