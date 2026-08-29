@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+frontend/node_modules/
 __pycache__/
 *.pyc
 .venv/
@@ -21,6 +22,14 @@ build/
 .env
 .env.local
 *.env
+!.env.example
+!**/.env.example
+
+# Neon CLI context
+.neon
+
+# Agents / skills local cache (optional commit of skills is OK)
+# .agents/
 
 # Database
 *.db
@@ -49,3 +58,4 @@ pip-log.txt
 .coverage
 htmlcov/
 .pytest_cache/
+.neon

@@ -3,19 +3,38 @@ Configuration de la base de données SQLAlchemy
 GICOS - Galaxie Immobilière Construction et Services
 
 Prod (Neon) : DATABASE_URL=postgresql://...
-Dev local   : SQLite ./gicos.db (défaut)
+Dev local   : SQLite ./gicos.db (défaut si DATABASE_URL absent)
 """
 
 import os
+from pathlib import Path
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+# Charger backend/.env puis .env racine (sans écraser l'env système)
+try:
+    from dotenv import load_dotenv
+
+    _backend_dir = Path(__file__).resolve().parent
+    load_dotenv(_backend_dir / ".env")
+    load_dotenv(_backend_dir.parent / ".env")
+except ImportError:
+    pass
 
 
 def _normalize_database_url(url: str) -> str:
     # Heroku/Neon legacy scheme
     if url.startswith("postgres://"):
         return url.replace("postgres://", "postgresql://", 1)
+    # channel_binding peut poser problème avec certains drivers
+    if "channel_binding=" in url:
+        parts = []
+        for part in url.split("&"):
+            if not part.startswith("channel_binding="):
+                parts.append(part)
+        url = "&".join(parts)
     return url
 
 
