@@ -291,10 +291,12 @@ async def health_check():
 
     info = storage_status()
     return {
-        "status": "ok",
+        "status": "ok" if not info.get("warning") else "degraded",
         "message": "API fonctionnelle",
         "storage": info["mode"],
         "storage_warning": info["warning"],
+        "cloudinary_ok": (info.get("cloudinary") or {}).get("ok"),
+        "cloudinary_cloud_name": (info.get("cloudinary") or {}).get("cloud_name"),
     }
 
 
