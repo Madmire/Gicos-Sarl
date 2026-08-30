@@ -4,7 +4,7 @@ GICOS - Galaxie Immobilière Construction et Services
 """
 
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Body
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from database import get_db
@@ -206,7 +206,7 @@ async def delete_gallery_image(
 
 @router.delete("/")
 async def delete_multiple_gallery_images(
-    image_ids: List[int],
+    image_ids: List[int] = Body(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)
 ):

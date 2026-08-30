@@ -24,7 +24,7 @@ const AdminMessages = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await contactAPI.getAll({});
+        const response = await contactAPI.getAll({ limit: 500 });
         setMessages(response.data);
       } catch (error) {
         console.error('Erreur:', error);

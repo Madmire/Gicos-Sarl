@@ -3,9 +3,10 @@
  * GICOS - Galaxie Immobilière Construction et Services
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { contactAPI } from '../api';
 import {
   LayoutDashboard,
   Building2,
@@ -22,9 +23,22 @@ import {
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUnread = async () => {
+      try {
+        const response = await contactAPI.getUnreadCount();
+        setUnreadCount(response.data.unread_count || 0);
+      } catch {
+        setUnreadCount(0);
+      }
+    };
+    fetchUnread();
+  }, [location.pathname]);
 
   const menuItems = [
     { name: 'Tableau de bord', path: '/admin', icon: LayoutDashboard },
@@ -156,7 +170,9 @@ const AdminLayout = () => {
               title="Messages"
             >
               <Bell size={22} />
-              <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-meta-1 rounded-full border-2 border-white" />
+              {unreadCount > 0 && (
+                <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-meta-1 rounded-full border-2 border-white" />
+              )}
             </Link>
 
             {/* User dropdown */}

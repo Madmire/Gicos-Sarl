@@ -71,53 +71,6 @@ async def create_service(
     return new_service
 
 
-@router.put("/{service_id}", response_model=ServiceResponse)
-async def update_service(
-    service_id: int,
-    service_data: ServiceUpdate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_admin_user)
-):
-    """Met à jour un service existant."""
-    service = db.query(Service).filter(Service.id == service_id).first()
-    
-    if not service:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Service non trouvé"
-        )
-    
-    update_data = service_data.model_dump(exclude_unset=True)
-    for key, value in update_data.items():
-        setattr(service, key, value)
-    
-    db.commit()
-    db.refresh(service)
-    
-    return service
-
-
-@router.delete("/{service_id}")
-async def delete_service(
-    service_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_admin_user)
-):
-    """Supprime un service."""
-    service = db.query(Service).filter(Service.id == service_id).first()
-    
-    if not service:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Service non trouvé"
-        )
-    
-    db.delete(service)
-    db.commit()
-    
-    return {"message": "Service supprimé avec succès"}
-
-
 @router.put("/reorder")
 async def reorder_services(
     order: List[dict],  # [{"id": 1, "order_index": 0}, ...]
@@ -129,7 +82,54 @@ async def reorder_services(
         service = db.query(Service).filter(Service.id == item["id"]).first()
         if service:
             service.order_index = item["order_index"]
-    
+
     db.commit()
-    
+
     return {"message": "Ordre des services mis à jour"}
+
+
+@router.put("/{service_id}", response_model=ServiceResponse)
+async def update_service(
+    service_id: int,
+    service_data: ServiceUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """Met à jour un service existant."""
+    service = db.query(Service).filter(Service.id == service_id).first()
+
+    if not service:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Service non trouvé"
+        )
+
+    update_data = service_data.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(service, key, value)
+
+    db.commit()
+    db.refresh(service)
+
+    return service
+
+
+@router.delete("/{service_id}")
+async def delete_service(
+    service_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_admin_user)
+):
+    """Supprime un service."""
+    service = db.query(Service).filter(Service.id == service_id).first()
+
+    if not service:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Service non trouvé"
+        )
+
+    db.delete(service)
+    db.commit()
+
+    return {"message": "Service supprimé avec succès"}

@@ -11,7 +11,6 @@ import {
   Edit, 
   Trash2, 
   Eye,
-  MoreVertical,
   Building2
 } from 'lucide-react';
 import { propertiesAPI, getImageUrl, formatPrice } from '../../api';
@@ -21,11 +20,10 @@ const AdminProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [deleteId, setDeleteId] = useState(null);
 
   const fetchProperties = async () => {
     try {
-      const params = search ? { search } : {};
+      const params = { limit: 500, ...(search ? { search } : {}) };
       const response = await propertiesAPI.getAll(params);
       setProperties(response.data);
     } catch (error) {

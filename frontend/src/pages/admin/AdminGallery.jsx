@@ -49,7 +49,9 @@ const AdminGallery = () => {
 
   const fetchImages = async () => {
     try {
-      const params = activeFilter ? { image_type: activeFilter } : {};
+      const params = activeFilter
+        ? { image_type: activeFilter, limit: 500 }
+        : { limit: 500 };
       const response = await galleryAPI.getAll(params);
       setImages(response.data);
     } catch (error) {

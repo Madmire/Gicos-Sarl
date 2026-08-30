@@ -49,6 +49,13 @@ const AdminServices = () => {
   };
 
   const handleSave = async () => {
+    try {
+      JSON.parse(editForm.features);
+    } catch {
+      alert('Format JSON invalide pour les prestations');
+      return;
+    }
+
     setSaving(true);
     try {
       await servicesAPI.update(editingId, editForm);

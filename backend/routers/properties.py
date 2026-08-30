@@ -111,18 +111,43 @@ async def get_properties_count(
     property_type: Optional[str] = None,
     city: Optional[str] = None,
     category: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    min_surface: Optional[float] = None,
+    max_surface: Optional[float] = None,
+    rooms: Optional[int] = None,
+    search: Optional[str] = None,
+    featured: Optional[bool] = None,
     db: Session = Depends(get_db)
 ):
     """Compte le nombre total d'annonces avec filtres."""
     query = db.query(Property)
-    
+
     if property_type:
         query = query.filter(Property.property_type == property_type)
     if city:
         query = query.filter(Property.city.ilike(f"%{city}%"))
     if category:
         query = query.filter(Property.category == category)
-    
+    if min_price is not None:
+        query = query.filter(Property.price >= min_price)
+    if max_price is not None:
+        query = query.filter(Property.price <= max_price)
+    if min_surface is not None:
+        query = query.filter(Property.surface >= min_surface)
+    if max_surface is not None:
+        query = query.filter(Property.surface <= max_surface)
+    if rooms is not None:
+        query = query.filter(Property.rooms >= rooms)
+    if featured is not None:
+        query = query.filter(Property.featured == featured)
+    if search:
+        query = query.filter(
+            (Property.title.ilike(f"%{search}%")) |
+            (Property.description.ilike(f"%{search}%")) |
+            (Property.city.ilike(f"%{search}%"))
+        )
+
     return {"count": query.count()}
 
 

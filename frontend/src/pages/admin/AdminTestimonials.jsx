@@ -36,7 +36,7 @@ const AdminTestimonials = () => {
 
   const fetchTestimonials = async () => {
     try {
-      const response = await testimonialsAPI.getAll(false);
+      const response = await testimonialsAPI.getAll(false, 500);
       setTestimonials(response.data);
     } catch (error) {
       console.error('Erreur:', error);
@@ -109,7 +109,7 @@ const AdminTestimonials = () => {
           <h1 className="text-2xl font-bold text-gray-900">Témoignages</h1>
           <p className="text-gray-600">Gérez les témoignages clients</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-primary">
+        <button onClick={() => { resetForm(); setShowForm(true); }} className="btn-primary">
           <Plus size={20} className="mr-2" />
           Nouveau témoignage
         </button>
@@ -282,7 +282,7 @@ const AdminTestimonials = () => {
             <p className="text-gray-500 mb-6">
               Ajoutez des témoignages clients pour renforcer votre crédibilité
             </p>
-            <button onClick={() => setShowForm(true)} className="btn-primary">
+            <button onClick={() => { resetForm(); setShowForm(true); }} className="btn-primary">
               <Plus size={20} className="mr-2" />
               Ajouter un témoignage
             </button>
