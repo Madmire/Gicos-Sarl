@@ -13,6 +13,18 @@ logger = logging.getLogger(__name__)
 UPLOAD_DIR = "uploads"
 
 
+class StorageError(Exception):
+    """Erreur de stockage (Cloudinary requis en production)."""
+
+
+def is_production_hosting() -> bool:
+    """Render définit RENDER=true ; Neon/Postgres indique aussi la prod."""
+    if os.getenv("RENDER"):
+        return True
+    db_url = os.getenv("DATABASE_URL", "")
+    return db_url.startswith("postgresql")
+
+
 def cloudinary_configured() -> bool:
     if os.getenv("CLOUDINARY_URL"):
         return True
@@ -21,6 +33,17 @@ def cloudinary_configured() -> bool:
         and os.getenv("CLOUDINARY_API_KEY")
         and os.getenv("CLOUDINARY_API_SECRET")
     )
+
+
+def storage_status() -> dict:
+    mode = "cloudinary" if cloudinary_configured() else "local"
+    warning = None
+    if is_production_hosting() and not cloudinary_configured():
+        warning = (
+            "Cloudinary non configuré : les images seront perdues à chaque redeploy. "
+            "Ajoutez CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY et CLOUDINARY_API_SECRET sur Render."
+        )
+    return {"mode": mode, "production": is_production_hosting(), "warning": warning}
 
 
 def _configure_cloudinary():
@@ -39,7 +62,6 @@ def _configure_cloudinary():
 
 
 def _public_id_from_url(url: str) -> Optional[str]:
-    """Extrait le public_id d'une URL Cloudinary."""
     match = re.search(r"/upload/(?:v\d+/)?(.+)\.[a-zA-Z0-9]+$", url)
     return match.group(1) if match else None
 
@@ -76,14 +98,21 @@ async def save_upload(file, folder: str = "gicos") -> str:
             return result["secure_url"]
         except Exception as exc:
             logger.error("Cloudinary upload failed: %s", exc)
-            # Secours local si Cloudinary est mal configuré
-            return _save_local(content, ext)
+            if is_production_hosting():
+                raise StorageError(
+                    f"Échec Cloudinary : {exc}. Vérifiez vos clés API Cloudinary sur Render."
+                ) from exc
+
+    if is_production_hosting():
+        raise StorageError(
+            "Cloudinary obligatoire en production. "
+            "Configurez CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY et CLOUDINARY_API_SECRET sur Render."
+        )
 
     return _save_local(content, ext)
 
 
 def delete_media(stored: Optional[str]) -> None:
-    """Supprime un média (URL Cloudinary ou fichier local)."""
     if not stored:
         return
 
@@ -107,7 +136,6 @@ def delete_media(stored: Optional[str]) -> None:
 
 
 def media_path_for_db(stored: str) -> str:
-    """Valeur filepath pour la galerie."""
     if stored.startswith("http://") or stored.startswith("https://"):
         return stored
     return f"/uploads/{stored}"

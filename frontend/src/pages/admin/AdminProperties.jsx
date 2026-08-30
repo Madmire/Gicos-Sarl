@@ -14,6 +14,7 @@ import {
   Building2
 } from 'lucide-react';
 import { propertiesAPI, getImageUrl, formatPrice } from '../../api';
+import SafeImage from '../../components/SafeImage';
 import Loading from '../../components/Loading';
 
 const AdminProperties = () => {
@@ -101,7 +102,7 @@ const AdminProperties = () => {
                       <div className="flex items-center gap-4">
                         <div className="w-16 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                           {property.primary_image ? (
-                            <img
+                            <SafeImage
                               src={getImageUrl(property.primary_image)}
                               alt={property.title}
                               className="w-full h-full object-cover"

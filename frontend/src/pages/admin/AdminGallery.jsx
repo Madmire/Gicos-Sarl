@@ -13,6 +13,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { galleryAPI, getImageUrl } from '../../api';
+import SafeImage from '../../components/SafeImage';
 import Loading, { ButtonLoading } from '../../components/Loading';
 
 const AdminGallery = () => {
@@ -230,7 +231,7 @@ const AdminGallery = () => {
                 }`}
                 onClick={() => selectionMode && toggleImageSelection(image.id)}
               >
-                <img
+                <SafeImage
                   src={getImageUrl(image.filename)}
                   alt={image.title || ''}
                   className="w-full h-full object-cover"

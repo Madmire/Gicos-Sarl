@@ -15,6 +15,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { propertiesAPI, getImageUrl } from '../../api';
+import SafeImage from '../../components/SafeImage';
 import { ButtonLoading, PageLoading } from '../../components/Loading';
 
 const AdminPropertyForm = () => {
@@ -408,7 +409,7 @@ const AdminPropertyForm = () => {
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
                   {images.map((image) => (
                     <div key={image.id} className="relative group">
-                      <img
+                      <SafeImage
                         src={getImageUrl(image.filename)}
                         alt=""
                         className="w-full aspect-square object-cover rounded-xl"

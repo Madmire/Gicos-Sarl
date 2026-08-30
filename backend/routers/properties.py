@@ -17,7 +17,7 @@ from schemas import (
     PropertyImageResponse
 )
 from auth import get_current_admin_user
-from storage import save_upload, delete_media
+from storage import save_upload, delete_media, StorageError
 
 router = APIRouter(prefix="/api/properties", tags=["Annonces"])
 
@@ -326,20 +326,27 @@ async def upload_property_images(
     
     uploaded_images = []
     is_first = len(property_obj.images) == 0
-    
-    for file in files:
-        stored = await save_upload(file, folder="gicos/properties")
-        
-        image = PropertyImage(
-            filename=stored,
-            property_id=property_id,
-            is_primary=is_first
+
+    try:
+        for file in files:
+            stored = await save_upload(file, folder="gicos/properties")
+
+            image = PropertyImage(
+                filename=stored,
+                property_id=property_id,
+                is_primary=is_first
+            )
+            db.add(image)
+            uploaded_images.append(stored)
+            is_first = False
+
+        db.commit()
+    except StorageError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(exc),
         )
-        db.add(image)
-        uploaded_images.append(stored)
-        is_first = False
-    
-    db.commit()
     
     return {"message": f"{len(uploaded_images)} image(s) uploadée(s)", "images": uploaded_images}
 

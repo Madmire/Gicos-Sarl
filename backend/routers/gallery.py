@@ -11,7 +11,7 @@ from database import get_db
 from models import Gallery, User
 from schemas import GalleryResponse
 from auth import get_current_admin_user
-from storage import save_upload, delete_media, media_path_for_db
+from storage import save_upload, delete_media, media_path_for_db, StorageError
 
 router = APIRouter(prefix="/api/gallery", tags=["Galerie"])
 
@@ -118,25 +118,31 @@ async def upload_gallery_images(
     
     # Créer le dossier uploads si nécessaire (mode local uniquement)
     uploaded_images = []
-    
-    for file in files:
-        # Vérifier que c'est une image
-        if not file.content_type or not file.content_type.startswith("image/"):
-            continue
-        
-        stored = await save_upload(file, folder="gicos/gallery")
-        
-        gallery_image = Gallery(
-            filename=stored,
-            filepath=media_path_for_db(stored),
-            image_type=image_type,
-            title=title,
-            description=description
+
+    try:
+        for file in files:
+            if not file.content_type or not file.content_type.startswith("image/"):
+                continue
+
+            stored = await save_upload(file, folder="gicos/gallery")
+
+            gallery_image = Gallery(
+                filename=stored,
+                filepath=media_path_for_db(stored),
+                image_type=image_type,
+                title=title,
+                description=description
+            )
+            db.add(gallery_image)
+            uploaded_images.append(stored)
+
+        db.commit()
+    except StorageError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(exc),
         )
-        db.add(gallery_image)
-        uploaded_images.append(stored)
-    
-    db.commit()
     
     return {
         "message": f"{len(uploaded_images)} image(s) uploadée(s)",

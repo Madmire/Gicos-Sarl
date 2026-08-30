@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Maximize, BedDouble, Bath } from 'lucide-react';
 import { getImageUrl, formatPrice } from '../api';
+import SafeImage from './SafeImage';
 
 const PropertyCard = ({ property }) => {
   const {
@@ -28,7 +29,7 @@ const PropertyCard = ({ property }) => {
       {/* Image container */}
       <div className="relative aspect-[4/3] overflow-hidden">
         {primary_image ? (
-          <img
+          <SafeImage
             src={getImageUrl(primary_image)}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

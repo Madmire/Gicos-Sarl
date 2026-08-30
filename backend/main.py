@@ -287,7 +287,15 @@ async def root():
 @app.get("/api/health")
 async def health_check():
     """Vérification de l'état de l'API."""
-    return {"status": "ok", "message": "API fonctionnelle"}
+    from storage import storage_status
+
+    info = storage_status()
+    return {
+        "status": "ok",
+        "message": "API fonctionnelle",
+        "storage": info["mode"],
+        "storage_warning": info["warning"],
+    }
 
 
 if __name__ == "__main__":

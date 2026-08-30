@@ -24,6 +24,7 @@ import {
 import ContactForm from '../components/ContactForm';
 import { PageLoading } from '../components/Loading';
 import { propertiesAPI, getImageUrl, formatPrice } from '../api';
+import SafeImage from '../components/SafeImage';
 
 const FAVORITES_KEY = 'gicos_favorites';
 
@@ -148,11 +149,10 @@ const PropertyDetailPage = () => {
               <div className="relative aspect-[16/10] bg-gray-100">
                 {images.length > 0 ? (
                   <>
-                    <img
+                    <SafeImage
                       src={images[currentImageIndex]}
                       alt={property.title}
                       className="w-full h-full object-contain bg-gray-900"
-                      style={{ objectFit: 'contain' }}
                     />
                     
                     {/* Navigation arrows */}

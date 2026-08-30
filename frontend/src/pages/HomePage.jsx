@@ -31,6 +31,7 @@ import TestimonialForm from '../components/TestimonialForm';
 import ContactForm from '../components/ContactForm';
 import Loading from '../components/Loading';
 import { propertiesAPI, servicesAPI, testimonialsAPI, galleryAPI, getImageUrl } from '../api';
+import SafeImage from '../components/SafeImage';
 
 const HomePage = () => {
   const [properties, setProperties] = useState([]);
@@ -364,7 +365,7 @@ const HomePage = () => {
                     index === 0 ? 'md:col-span-2 md:row-span-2' : ''
                   }`}
                 >
-                  <img
+                  <SafeImage
                     src={getImageUrl(image.filename)}
                     alt={image.title || 'Réalisation GICOS'}
                     className="w-full h-full object-cover aspect-square hover:scale-105 transition-transform duration-500"

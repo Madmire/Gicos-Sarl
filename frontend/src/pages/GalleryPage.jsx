@@ -9,6 +9,7 @@ import { Image } from 'lucide-react';
 import Lightbox from '../components/Lightbox';
 import { PageLoading } from '../components/Loading';
 import { galleryAPI, getImageUrl } from '../api';
+import SafeImage from '../components/SafeImage';
 
 const GalleryPage = () => {
   const [images, setImages] = useState([]);
@@ -90,7 +91,7 @@ const GalleryPage = () => {
           <div className="w-full flex justify-center md:justify-end">
             {images[0] ? (
               <div className="w-96 h-64 md:w-[520px] md:h-[340px] rounded-2xl overflow-hidden shadow-2xl">
-                <img
+                <SafeImage
                   src={getImageUrl(images[0].filename)}
                   alt={images[0].title || 'Aperçu galerie'}
                   className="w-full h-full object-cover"
@@ -146,7 +147,7 @@ const GalleryPage = () => {
                 onClick={() => openLightbox(index)}
                 className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg aspect-square hover:shadow-2xl transition-shadow"
               >
-                <img
+                <SafeImage
                   src={getImageUrl(image.filename)}
                   alt={image.title || 'Image galerie'}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

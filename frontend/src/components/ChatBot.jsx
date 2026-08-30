@@ -6,6 +6,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle, X, Send, Bot, User, MapPin, ExternalLink } from 'lucide-react';
 import { getImageUrl } from '../api';
+import SafeImage from './SafeImage';
 import { getWelcomeMessage, processMessage } from '../utils/chatBotEngine';
 
 const ChatBot = () => {
@@ -151,7 +152,7 @@ const ChatBot = () => {
                         >
                           <div className="w-14 h-14 rounded-lg overflow-hidden bg-gray-100 shrink-0">
                             {offer.image ? (
-                              <img
+                              <SafeImage
                                 src={getImageUrl(offer.image)}
                                 alt=""
                                 className="w-full h-full object-cover"

@@ -240,7 +240,8 @@ export const getImageUrl = (filename) => {
   if (filename.startsWith('http://') || filename.startsWith('https://')) {
     return filename;
   }
-  const path = `/uploads/${filename}`;
+  const name = filename.replace(/^\/?uploads\//, '');
+  const path = `/uploads/${name}`;
   return API_ORIGIN ? `${API_ORIGIN}${path}` : path;
 };
 
