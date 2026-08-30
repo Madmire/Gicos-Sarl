@@ -25,6 +25,7 @@ const Footer = () => {
     { name: 'Nos annonces', path: '/annonces' },
     { name: 'Nos services', path: '/services' },
     { name: 'Galerie', path: '/galerie' },
+    { name: 'Témoignages', path: '/#temoignages' },
     { name: 'Contact', path: '/contact' },
   ];
 

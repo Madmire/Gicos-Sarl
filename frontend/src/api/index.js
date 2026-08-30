@@ -221,6 +221,9 @@ export const testimonialsAPI = {
   
   create: (data) =>
     api.post('/testimonials/', data),
+
+  submit: (data) =>
+    api.post('/testimonials/submit', data),
   
   update: (id, data) =>
     api.put(`/testimonials/${id}`, data),

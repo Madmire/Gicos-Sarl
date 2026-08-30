@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from database import get_db
 from models import Testimonial, User
-from schemas import TestimonialCreate, TestimonialResponse
+from schemas import TestimonialCreate, TestimonialResponse, TestimonialSubmit
 from auth import get_current_admin_user
 
 router = APIRouter(prefix="/api/testimonials", tags=["Témoignages"])
@@ -48,6 +48,26 @@ async def get_testimonial(
         )
     
     return testimonial
+
+
+@router.post("/submit", response_model=TestimonialResponse)
+async def submit_testimonial(
+    testimonial_data: TestimonialSubmit,
+    db: Session = Depends(get_db),
+):
+    """
+    Soumission publique d'un témoignage.
+    Le témoignage reste inactif jusqu'à validation par l'administrateur.
+    """
+    new_testimonial = Testimonial(
+        **testimonial_data.model_dump(),
+        is_active=False,
+    )
+    db.add(new_testimonial)
+    db.commit()
+    db.refresh(new_testimonial)
+
+    return new_testimonial
 
 
 @router.post("/", response_model=TestimonialResponse)

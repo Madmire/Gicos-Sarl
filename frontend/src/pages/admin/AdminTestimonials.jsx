@@ -269,7 +269,9 @@ const AdminTestimonials = () => {
               </p>
 
               {!testimonial.is_active && (
-                <p className="text-sm text-amber-600 mt-3">Non affiché sur le site</p>
+                <span className="inline-block mt-3 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
+                  En attente de validation
+                </span>
               )}
             </div>
           ))

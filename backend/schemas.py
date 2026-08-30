@@ -216,6 +216,14 @@ class TestimonialCreate(TestimonialBase):
     pass
 
 
+class TestimonialSubmit(BaseModel):
+    """Soumission publique — modération requise avant publication."""
+    name: str = Field(..., min_length=2, max_length=100)
+    role: Optional[str] = Field(None, max_length=100)
+    content: str = Field(..., min_length=10, max_length=2000)
+    rating: int = Field(default=5, ge=1, le=5)
+
+
 class TestimonialResponse(TestimonialBase):
     id: int
     created_at: datetime

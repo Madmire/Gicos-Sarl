@@ -27,6 +27,7 @@ import {
 import PropertyCard from '../components/PropertyCard';
 import ServiceCard from '../components/ServiceCard';
 import TestimonialCard from '../components/TestimonialCard';
+import TestimonialForm from '../components/TestimonialForm';
 import ContactForm from '../components/ContactForm';
 import Loading from '../components/Loading';
 import { propertiesAPI, servicesAPI, testimonialsAPI, galleryAPI, getImageUrl } from '../api';
@@ -441,17 +442,17 @@ const HomePage = () => {
       </section>
 
       {/* Testimonials */}
-      {testimonials.length > 0 && (
-        <section className="section bg-white">
-          <div className="container-custom">
-            <div className="mb-12 text-center">
-              <h2 className="section-heading-title mx-auto max-w-3xl">Ce que les gens disent</h2>
-              <p className="section-heading-copy mx-auto mt-4 max-w-4xl text-gray-500">
-                Notre équipe chevronnée excelle dans l’immobilier avec des années de navigation réussie sur le marché, offrant des décisions éclairées et des résultats optimaux.
-              </p>
-            </div>
+      <section className="section bg-white" id="temoignages">
+        <div className="container-custom">
+          <div className="mb-12 text-center">
+            <h2 className="section-heading-title mx-auto max-w-3xl">Ce que les gens disent</h2>
+            <p className="section-heading-copy mx-auto mt-4 max-w-4xl text-gray-500">
+              Découvrez les avis de nos clients ou partagez votre propre expérience avec GICOS.
+            </p>
+          </div>
 
-            <div className="relative">
+          {testimonials.length > 0 && (
+            <div className="relative mb-12">
               <button
                 type="button"
                 onClick={() => setTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
@@ -475,24 +476,28 @@ const HomePage = () => {
               >
                 <ChevronRight className="h-6 w-6" />
               </button>
-            </div>
 
-            <div className="mt-8 flex justify-center gap-3">
-              {Array.from({ length: testimonials.length }).map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => setTestimonialIndex(index)}
-                  className={`h-3 w-3 rounded-full transition ${
-                    index === testimonialIndex ? 'bg-[#1f2937]' : 'bg-gray-300'
-                  }`}
-                  aria-label={`Voir le témoignage ${index + 1}`}
-                />
-              ))}
+              <div className="mt-8 flex justify-center gap-3">
+                {Array.from({ length: testimonials.length }).map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => setTestimonialIndex(index)}
+                    className={`h-3 w-3 rounded-full transition ${
+                      index === testimonialIndex ? 'bg-[#1f2937]' : 'bg-gray-300'
+                    }`}
+                    aria-label={`Voir le témoignage ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
+          )}
+
+          <div className="mx-auto max-w-2xl">
+            <TestimonialForm />
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Contact Section */}
       <section className="section bg-gray-50" id="contact">
