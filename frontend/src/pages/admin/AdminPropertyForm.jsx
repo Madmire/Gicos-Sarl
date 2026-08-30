@@ -141,7 +141,8 @@ const AdminPropertyForm = () => {
       navigate('/admin/annonces');
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur lors de l\'enregistrement');
+      const detail = error.response?.data?.detail;
+      alert(typeof detail === 'string' ? detail : 'Erreur lors de l\'enregistrement');
     } finally {
       setSaving(false);
       setUploadingImages(false);

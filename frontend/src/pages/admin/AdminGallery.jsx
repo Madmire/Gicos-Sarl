@@ -89,7 +89,11 @@ const AdminGallery = () => {
       clearUploadSelection();
       fetchImages();
     } catch (error) {
-      alert('Erreur lors de l\'upload');
+      const detail = error.response?.data?.detail;
+      const msg = typeof detail === 'string'
+        ? detail
+        : 'Erreur lors de l\'upload. Vérifiez la taille des fichiers et réessayez.';
+      alert(msg);
     } finally {
       setUploading(false);
     }
