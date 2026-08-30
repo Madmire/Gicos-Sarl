@@ -107,9 +107,8 @@ export const propertiesAPI = {
     files.forEach((file) => {
       formData.append('files', file);
     });
-    return api.post(`/properties/${propertyId}/images`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    // Ne pas fixer Content-Type : axios ajoute le boundary multipart automatiquement
+    return api.post(`/properties/${propertyId}/images`, formData);
   },
   
   deleteImage: (propertyId, imageId) =>
@@ -143,9 +142,7 @@ export const galleryAPI = {
     if (title) formData.append('title', title);
     if (description) formData.append('description', description);
     
-    return api.post('/gallery/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    return api.post('/gallery/upload', formData);
   },
   
   update: (id, data) => {
@@ -155,9 +152,7 @@ export const galleryAPI = {
         formData.append(key, value);
       }
     });
-    return api.put(`/gallery/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    return api.put(`/gallery/${id}`, formData);
   },
   
   delete: (id) =>

@@ -5,9 +5,12 @@ GICOS - Galaxie Immobilière Construction et Services
 
 import os
 import json
-from fastapi import FastAPI
+import re
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.exceptions import RequestValidationError
 from sqlalchemy.orm import Session
 
 from database import engine, Base, SessionLocal
@@ -32,6 +35,7 @@ _default_origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
+    "https://gicos-sarl.vercel.app",
 ]
 _extra = os.getenv("CORS_ORIGINS", "")
 allow_origins = list(_default_origins)
@@ -39,9 +43,31 @@ if _extra.strip():
     allow_origins.extend(
         o.strip() for o in _extra.split(",") if o.strip()
     )
+# Dédupliquer tout en conservant l'ordre
+allow_origins = list(dict.fromkeys(allow_origins))
 
 # Autoriser tous les déploiements Vercel (*.vercel.app)
 _cors_regex = os.getenv("CORS_ORIGIN_REGEX", r"https://.*\.vercel\.app")
+
+
+def _origin_allowed(origin: str) -> bool:
+    if not origin:
+        return False
+    if origin in allow_origins:
+        return True
+    if _cors_regex:
+        return re.match(_cors_regex, origin) is not None
+    return False
+
+
+def _cors_headers(origin: str) -> dict:
+    if _origin_allowed(origin):
+        return {
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Credentials": "true",
+        }
+    return {}
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -51,6 +77,39 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    origin = request.headers.get("origin", "")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers=_cors_headers(origin),
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    origin = request.headers.get("origin", "")
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors()},
+        headers=_cors_headers(origin),
+    )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    """Garantit les en-têtes CORS même en cas d'erreur 500."""
+    import traceback
+    traceback.print_exc()
+    origin = request.headers.get("origin", "")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Erreur serveur lors du traitement de la requête"},
+        headers=_cors_headers(origin),
+    )
 
 # Créer le dossier uploads s'il n'existe pas
 UPLOAD_DIR = "uploads"

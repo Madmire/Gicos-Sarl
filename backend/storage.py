@@ -2,10 +2,13 @@
 Stockage des images : Cloudinary (prod) ou dossier local uploads/ (dev)
 """
 
+import logging
 import os
 import re
 import uuid
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 UPLOAD_DIR = "uploads"
 
@@ -41,6 +44,15 @@ def _public_id_from_url(url: str) -> Optional[str]:
     return match.group(1) if match else None
 
 
+def _save_local(content: bytes, ext: str) -> str:
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    unique_filename = f"{uuid.uuid4()}{ext}"
+    file_path = os.path.join(UPLOAD_DIR, unique_filename)
+    with open(file_path, "wb") as f:
+        f.write(content)
+    return unique_filename
+
+
 async def save_upload(file, folder: str = "gicos") -> str:
     """
     Sauvegarde un UploadFile.
@@ -51,23 +63,23 @@ async def save_upload(file, folder: str = "gicos") -> str:
     ext = os.path.splitext(original)[1] or ".jpg"
 
     if cloudinary_configured():
-        _configure_cloudinary()
-        import cloudinary.uploader
+        try:
+            _configure_cloudinary()
+            import cloudinary.uploader
 
-        result = cloudinary.uploader.upload(
-            content,
-            folder=folder,
-            resource_type="image",
-            public_id=str(uuid.uuid4()),
-        )
-        return result["secure_url"]
+            result = cloudinary.uploader.upload(
+                content,
+                folder=folder,
+                resource_type="image",
+                public_id=str(uuid.uuid4()),
+            )
+            return result["secure_url"]
+        except Exception as exc:
+            logger.error("Cloudinary upload failed: %s", exc)
+            # Secours local si Cloudinary est mal configuré
+            return _save_local(content, ext)
 
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-    unique_filename = f"{uuid.uuid4()}{ext}"
-    file_path = os.path.join(UPLOAD_DIR, unique_filename)
-    with open(file_path, "wb") as f:
-        f.write(content)
-    return unique_filename
+    return _save_local(content, ext)
 
 
 def delete_media(stored: Optional[str]) -> None:
