@@ -40,9 +40,13 @@ if _extra.strip():
         o.strip() for o in _extra.split(",") if o.strip()
     )
 
+# Autoriser tous les déploiements Vercel (*.vercel.app)
+_cors_regex = os.getenv("CORS_ORIGIN_REGEX", r"https://.*\.vercel\.app")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
+    allow_origin_regex=_cors_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

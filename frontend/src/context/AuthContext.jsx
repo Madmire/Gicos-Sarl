@@ -55,9 +55,17 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      const detail = error.response?.data?.detail;
+      const message = typeof detail === 'string'
+        ? detail
+        : Array.isArray(detail)
+          ? detail.map((d) => d.msg).join(', ')
+          : error.response
+            ? 'Erreur de connexion'
+            : 'Impossible de joindre le serveur API. Vérifiez VITE_API_URL et CORS.';
       return {
         success: false,
-        error: error.response?.data?.detail || 'Erreur de connexion'
+        error: message,
       };
     }
   };

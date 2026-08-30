@@ -6,8 +6,12 @@
 import axios from 'axios';
 
 // En prod (Vercel) : VITE_API_URL = URL Render sans slash final
-// En local : proxy Vite vers /api et /uploads
-const API_ORIGIN = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+// Fallback prod si la variable n'est pas définie au build Vercel
+const DEFAULT_PROD_API = 'https://gid-sarl.onrender.com';
+const API_ORIGIN = (
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? DEFAULT_PROD_API : '')
+).replace(/\/$/, '');
 const API_BASE_URL = API_ORIGIN ? `${API_ORIGIN}/api` : '/api';
 
 // Instance Axios configurée
